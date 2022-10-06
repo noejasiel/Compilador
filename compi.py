@@ -1,17 +1,17 @@
-def impresion(mensaje,x ):
+def impresion(mensaje,informacion ):
     print(mensaje,informacion)
 
 def llenarLista(longitud):
     Contenedor=[]
-    for i in range(0, longitud):
+    for  i     in range(0, longitud):
         elemento = int(input("Introduce un numero: "))
         Contenedor.append(elemento) 
     return Contenedor
 
 def sumatoria(Lista):
     suma=0
-    for x in range(0,len(Lista)):
-        suma=suma+Lista[x]
+    for _ in range(0,len(Lista)):
+        suma=suma+Lista[_]
     return suma
 
 def calcularProducto(Lista):
