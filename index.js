@@ -1,6 +1,6 @@
 import { parametrosPrintf } from "./funcionalidades/parametrosPrintf.js";
 import { voidFunction } from "./funcionalidades/voidFunction.js";
-import { returnFunction } from "./funcionalidades/returnFunction.js";
+import { returnWithFunction } from "./funcionalidades/returnFunction.js";
 
 let callFunction = [];
 
@@ -92,6 +92,6 @@ const transformFunctionToC = (contenido, parametersFunction) => {
     voidFunction(contenido, parametersFunction);
   } else {
     //Funcion Tipo de dato
-    returnFunction(contenido, parametersFunction);
+    returnWithFunction(contenido, parametersFunction);
   }
 };
