@@ -3,10 +3,10 @@ import { parametrosPrintf } from "./parametrosPrintf.js";
 import { isEmptyLine } from "../utilities/isEmtyLine.js";
 import { isValidFor } from "../utilities/isValidFor.js";
 import { isSumFunction } from "../functions/sum.js";
-import { arrayDeclaratedParametersFunctions } from "../additionals/arrayStack.js";
-import { stackDeclarationVariables } from "../additionals/stackDeclarationVariables.js";
 import { handleErrors } from "../handleComprobation/declarationVariable.js";
 import { checkParameterDeclarated } from "../handleComprobation/checkParameterDeclarated.js";
+import { isFunction } from "../index.js";
+import { isMultFunction } from "../functions/multi.js";
 
 export const returnWithFunction = (contenido, parametersFunction) => {
   //Separamos el tetxo en lineas
@@ -17,7 +17,11 @@ export const returnWithFunction = (contenido, parametersFunction) => {
   let newCleanCode = isEmptyLine(lineaSeparada, contador);
   //comprobar si la linea sig declara alguntipo de variable
   if (isVariableDeclaration(newCleanCode[1], lineaSeparada)) {
-    console.log("SOY UNA DECLARSCION DE VARIABLE VALIDA");
+    console.log(
+      "SOY UNA DECLARSCION DE VARIABLE VALIDA",
+      newCleanCode[1],
+      lineaSeparada
+    );
     typeVariable(newCleanCode[1], parametersFunction, newCleanCode);
   } else {
     console.error("error se esperaba una declaracion de variable");
@@ -26,7 +30,7 @@ export const returnWithFunction = (contenido, parametersFunction) => {
 
 export const isVariableDeclaration = (firtstLine) => {
   const declarationVariableGeneralExpe =
-    /([a-zA-z][a-zA-Z0-9_]+)(\s*)=(\s*)(([a-zA-Z]+\s*\(\s*[a-z]+\s*\(\s*"(\s*[a-zA-Z0-9]*\s*)*(\:|)\s*"\s*\){2})|((int)(?!\())|"\s*.*\s*"|([0-9]+[a-zA-Z]*)*|[a-zA-Z]+|\[\]|\{\}|[a-zA-Z]+\s*[+]\s*[a-zA-Z]+\s*([[]\s*[a-z]*[0-9]*\s*]+))$/m;
+    /([a-zA-z][a-zA-Z0-9_]+)(\s*)=(\s*)(([a-zA-Z]+\s*\(\s*[a-z]+\s*\(\s*"(\s*[a-zA-Z0-9]*\s*)*(\:|)\s*"\s*\){2})|((int)(?!\())|"\s*.*\s*"|([0-9]+[a-zA-Z]*)+|([a-zA-Z]+((\[[0-9]\])*))|\[\]|\{\}|[a-zA-Z]+\s*[+]\s*[a-zA-Z]+\s*([[]\s*[a-z]*[0-9]*\s*]+))/g;
   const bool = true;
   if (declarationVariableGeneralExpe.test(firtstLine)) return bool;
   // if (comprobateCaseDeclarationVariable(firtstLine)) {
@@ -36,14 +40,27 @@ export const isVariableDeclaration = (firtstLine) => {
 
 const typeVariable = (lineaSeparada, parametersFunction, code) => {
   let typeFunction;
-  if (lineaSeparada.includes("[]")) {
+  // debugger;
+  let multiExpre =
+    /([a-zA-z][a-zA-Z0-9_]+)(\s*)=(\s*)(([a-zA-Z]+((\[[0-9]\])*)))/m;
+  let sumExpre = /(^[a-zA-z][a-zA-Z0-9_]+)(\s*)=(\s*[0-9]+$)/m;
+  let arrExpre = /(^[a-zA-z][a-zA-Z0-9_]+)(\s*)=(\s*\[\s*\]+$)/m;
+  lineaSeparada = lineaSeparada.split("\n")[1].trim();
+  console.log(
+    parametersFunction[1].split(")")[0],
+    multiExpre.test(lineaSeparada)
+  );
+  if (arrExpre.test(lineaSeparada)) {
     //es array
     typeFunction = 1;
     //se verifica si el for esta correcto y su contenido despues de comprobar el arreglo
     verifyFunctionFill(code, parametersFunction, lineaSeparada, typeFunction);
   }
-  // si tiene un numero hacer exprtesion regular
-  if (lineaSeparada.includes("0")) {
+  //aqui hago expre regular para verificar
+  else if (multiExpre.test(lineaSeparada)) {
+    typeFunction = 3;
+    verifyFunctionFill(code, parametersFunction, lineaSeparada, typeFunction);
+  } else if (sumExpre.test(lineaSeparada)) {
     typeFunction = 2;
     verifyFunctionFill(code, parametersFunction, lineaSeparada, typeFunction);
   }
@@ -61,6 +78,7 @@ const verifyFunctionFill = (
 
   //se comprueba si la funcion for es aceptada
   if (isValidFor(codeClean[2])) {
+    console.log("ES FOR VALIDO");
     if (typeFunction == 1) {
       //llenar lista
       isArrayFunction(
@@ -70,9 +88,16 @@ const verifyFunctionFill = (
         codeClean[2],
         code
       );
-    }
-    if (typeFunction == 2) {
+    } else if (typeFunction == 2) {
       isSumFunction(
+        codeClean,
+        parametersFunction,
+        declarationVariable,
+        codeClean[2]
+      );
+    } else if (typeFunction == 3) {
+      // debugger;
+      isMultFunction(
         codeClean,
         parametersFunction,
         declarationVariable,
@@ -91,6 +116,12 @@ const verifyAppendArr = (
   code
 ) => {
   try {
+    // debugger;
+    let expreGralAppendLine =
+      /(^[a-zA-z][a-zA-Z_]*\.append\(\s*[a-zA-z]*\s*\))/g;
+    if (!expreGralAppendLine.test(codeClean.trim())) {
+      throw new Error(`UY LA LINEA ${codeClean.trim()} TIENE UN ERROR`);
+    }
     //name de la variable []
     let nameVariabledeclarationArr = declarationVariable.split("=")[0].trim();
     //obteniendo la variable de retorno del return
@@ -106,6 +137,7 @@ const verifyAppendArr = (
     // nombre de la variable
     const nameArrAppend = codeSplit[0].trim();
     //obteniendo parametro que esta en append
+    ////no JALA PQ NO HAY ESE PARENTESIS
     let parameterAppend = codeSplit[1].split("(")[1].split(")")[0];
     nameArrAppend.replace(/\n/g, "");
     // ver si ya esta declarado
@@ -127,7 +159,13 @@ const verifyAppendArr = (
         nameArrAppend + "\\.append\\(\\s*" + parameterAppend + "\\s*\\)",
         "g"
       );
-      if (newExpre.test(codeClean)) return bool;
+      console.log(newExpre.test(codeClean), "Y ENTRI");
+      // debugger;
+      if (!newExpre.test(codeClean.trim())) {
+        return bool;
+      } else {
+        console.error(`LA LINEA ${codeClean.trim()} TIENE UN ERROR`);
+      }
     } else {
       throw new Error(
         `Vaya parece que ---> ${parameterAppend.trim()} 0 ${nameArrAppend.trim()} o ${returnnVariable} <----  no esta declarada`
@@ -174,6 +212,9 @@ const lineAndLine = (
   declarationVariable,
   codeCleanLineFor
 ) => {
+  console.log(codeCleanLineFor, "AQUIIIIIIIIIIIIIIIiii");
+  //obtener desde donde empieza la iteraciond e for
+  let numberIterationFor = codeCleanLineFor.split(",")[0].split("(")[1].trim();
   const codeInPrintf = codeClean1.split(/"/)[1].trim();
   let parameterFor = parametersFunction[1].split(")")[0].trim();
   let variableArr = declarationVariable.split("=")[0].trim();
@@ -186,17 +227,19 @@ const lineAndLine = (
   //funcion para coprobar la primera linea
   if (codeClean1.includes("int") && codeClean1.includes("input")) {
     let imprimir = `
-    int *llenarLista(int ${parameterFor}){
+    int *${parametersFunction[0]}(int ${parameterFor}){
     static int* ${variableArr};
     ${variableArr} = (int*)malloc(${parameterFor} * sizeof(int));
     int ${variableIteratorFor};
-    for( ${variableIteratorFor}=0; ${variableIteratorFor}< ${parameterFor}; ${variableIteratorFor}++){
+    for( ${variableIteratorFor}=${numberIterationFor}; ${variableIteratorFor}< ${parameterFor}; ${variableIteratorFor}++){
       printf("${codeInPrintf}");
       scanf("%d", &${variableArr}[${variableIteratorFor}]);
     }
+    ${variableArr}[${parameterFor}] = -1;
     return ${variableArr};
     }`;
     let elemento = document.getElementById("contenido-archivo");
     elemento.textContent += imprimir;
+    isFunction();
   }
 };

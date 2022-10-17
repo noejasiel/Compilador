@@ -1,8 +1,11 @@
 import { parametrosPrintf } from "./funcionalidades/parametrosPrintf.js";
 import { voidFunction } from "./funcionalidades/voidFunction.js";
 import { returnWithFunction } from "./funcionalidades/returnFunction.js";
+import { countFunctions } from "./utilities/countFunctions.js";
+import { arrPrimary } from "./additionals/arrPrimary.js";
 
 let callFunction = [];
+var cout = 1;
 
 document
   .getElementById("file-input")
@@ -19,12 +22,13 @@ function leerArchivo(e) {
   lector.onload = (e) => {
     let contenido = e.target.result;
     contenido = contenido.split("def");
-    console.log(contenido);
+    arrPrimary.push(contenido);
+    console.log(arrPrimary[0][2]);
     //pinta contenido en html
     // mostrarContenido(contenido);
     //llamando a la funcion que
     // completara funciones
-    isFunction(contenido);
+    isFunction(1);
   };
   lector.readAsText(archivo);
 }
@@ -36,8 +40,10 @@ function mostrarContenido(contenido) {
 
 // dividir funciones en arreglos
 // diferentes para trabajarlas con facilidad
-const isFunction = (contenido) => {
-  let imprimir = contenido[1];
+export const isFunction = () => {
+  // debugger;
+  let imprimir = arrPrimary[0][cout];
+  cout = cout + 1;
   //ya tenemos la funcion completa añadiendole def
   imprimir = "def " + imprimir;
   let functionResult = comprobarFuncion(imprimir);
@@ -70,6 +76,7 @@ const comprobarFuncion = (funcion) => {
 
 const readContent = (contenido) => {
   console.log(contenido, "desde readcontent");
+  // debugger;
   //exp regular para detectar name de las funciones
   const expre =
     /([^(def):\s\.r])[^a-z]*[a-zA-Z]+[a-zA-Z]+\(([a-zA-z]*)((\s*|\,)?((\s*)[a-zA-Z]+)(\s*|\,)?)*(\))/gm;
