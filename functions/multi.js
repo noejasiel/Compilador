@@ -1,6 +1,6 @@
 import { isVariableDeclaration } from "../funcionalidades/returnFunction.js";
 import { isEmptyLine } from "../utilities/isEmtyLine.js";
-import { isFunction } from "../index.js";
+import { callFunction, isFunction } from "../index.js";
 import { handleErrors } from "../handleComprobation/handleErrors.js";
 
 export const isMultFunction = (
@@ -99,6 +99,7 @@ const lineAndLine = (
     `;
     let elemento = document.getElementById("contenido-archivo");
     elemento.textContent += imprimir;
+    callFunction.push(imprimir);
     isFunction();
   }
 };

@@ -3,8 +3,10 @@ import { voidFunction } from "./funcionalidades/voidFunction.js";
 import { returnWithFunction } from "./funcionalidades/returnFunction.js";
 import { countFunctions } from "./utilities/countFunctions.js";
 import { arrPrimary } from "./additionals/arrPrimary.js";
+import { comprobateIdentation } from "./funcionalidades/comprobateIdentation.js";
+import { mainMenu } from "./functions/mainMenu.js";
 
-let callFunction = [];
+export let callFunction = [];
 var cout = 1;
 
 document
@@ -23,12 +25,16 @@ function leerArchivo(e) {
     let contenido = e.target.result;
     contenido = contenido.split("def");
     arrPrimary.push(contenido);
-    console.log(arrPrimary[0][2]);
+    let main = arrPrimary[0][arrPrimary[0].length - 1]
+      .split("return")[1]
+      .split("\r\n");
     //pinta contenido en html
     // mostrarContenido(contenido);
     //llamando a la funcion que
     // completara funciones
-    isFunction(1);
+    if (mainMenu(main)) {
+      isFunction(1);
+    }
   };
   lector.readAsText(archivo);
 }
@@ -42,18 +48,31 @@ function mostrarContenido(contenido) {
 // diferentes para trabajarlas con facilidad
 export const isFunction = () => {
   // debugger;
-  let imprimir = arrPrimary[0][cout];
-  cout = cout + 1;
-  //ya tenemos la funcion completa añadiendole def
-  imprimir = "def " + imprimir;
-  let functionResult = comprobarFuncion(imprimir);
-  console.log(comprobarFuncion(imprimir), functionResult, "desde aqui");
-  if (functionResult) {
-    //si funcion correcta hay que ver si
-    // su contenido es correcto
-    readContent(functionResult);
+  // RECORRERA EL ARREGLO QUE CONTINE LAS FUNCIONES Y LO IMPRIMIRA
+  if (arrPrimary[0][cout] != undefined) {
+    let imprimir = arrPrimary[0][cout];
+    cout = cout + 1;
+    //ya tenemos la funcion completa añadiendole def
+    imprimir = "def " + imprimir;
+    let functionResult = comprobarFuncion(imprimir);
+    console.log(comprobarFuncion(imprimir), functionResult, "desde aqui");
+    if (functionResult) {
+      //si funcion correcta hay que ver si
+      // su contenido es correcto
+      //Y SI SU IDENTACION ES CORRECTA
+      console.log(comprobateIdentation(imprimir));
+      if (comprobateIdentation(imprimir)) {
+        readContent(functionResult);
+      } else {
+        console.error("HAY UN PROBLEMA DE IDENTACION");
+      }
+    } else {
+      console.error(
+        `ERROR, LA FUNCION NO ES CORRECTA ${imprimir} EN LA LINEA ${imprimir[0]} `
+      );
+    }
   } else {
-    console.log("ERROR, LA FUNCION NO ES CORRECTA");
+    console.error("SE ACABOOO");
   }
 };
 
@@ -76,7 +95,6 @@ const comprobarFuncion = (funcion) => {
 
 const readContent = (contenido) => {
   console.log(contenido, "desde readcontent");
-  // debugger;
   //exp regular para detectar name de las funciones
   const expre =
     /([^(def):\s\.r])[^a-z]*[a-zA-Z]+[a-zA-Z]+\(([a-zA-z]*)((\s*|\,)?((\s*)[a-zA-Z]+)(\s*|\,)?)*(\))/gm;
@@ -90,15 +108,18 @@ const readContent = (contenido) => {
   callFunction.push(namesArr[0].split(/\(/)[0]);
   let parametersFunction = namesArr[0].split(/\(/);
   console.log(callFunction);
+  // comprobateIdentation()
   transformFunctionToC(contenido, parametersFunction);
 };
 
 const transformFunctionToC = (contenido, parametersFunction) => {
+  // debugger;
+  if (contenido.includes("return")) {
+    //Funcion  Tipo de dato
+    returnWithFunction(contenido, parametersFunction);
+  }
   if (!contenido.includes("return")) {
     //Funcion Void
     voidFunction(contenido, parametersFunction);
-  } else {
-    //Funcion Tipo de dato
-    returnWithFunction(contenido, parametersFunction);
   }
 };

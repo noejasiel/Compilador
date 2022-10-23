@@ -20,7 +20,7 @@ def calcularProducto(Lista):
         vActual=Lista[x]*vActual
     return vActual
 
-print("Bienvenido a compiladores") 
+print  ("Bienvenido a compiladores") 
 Datos=input("Datos a introducir: ")
 impresion("El usuario introducira",Datos)
 Datos=llenarLista(int(Datos))

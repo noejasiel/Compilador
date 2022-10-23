@@ -5,6 +5,7 @@ import { countFunctions } from "../utilities/countFunctions.js";
 import { isFunction } from "../index.js";
 import { arrPrimary } from "../additionals/arrPrimary.js";
 import { getDataReturnVariable } from "./multi.js";
+import { callFunction } from "../index.js";
 // import { handleErrors } from "../handleComprobation/handleErrors.js";
 
 export const isSumFunction = (
@@ -133,8 +134,8 @@ const lineAndLine = (
       elemento.textContent += imprimir;
       // debugger;
       countFunctions + 1;
+      callFunction.push(imprimir);
       isFunction();
-      // debugger;
     }
   } else {
     console.error(
@@ -151,15 +152,6 @@ const handleErrors = (
   variableMultiplicationIguality,
   variableReturn
 ) => {
-  console.log(
-    variableInDeclaration,
-    variableIteratorFor,
-    variableOriginalDeclaration,
-    variableMultiplication,
-    variableMultiplicationIguality,
-    variableReturn,
-    "ASDFGHJ"
-  );
   let count = 0;
   let bool = true;
 

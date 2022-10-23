@@ -1,5 +1,7 @@
 import { parametrosPrintf } from "./parametrosPrintf.js";
 import { comparation } from "../additionals/dictionary.js";
+import { isFunction } from "../index.js";
+import { callFunction } from "../index.js";
 
 export const voidFunction = (contenido, parametersFunction) => {
   try {
@@ -21,6 +23,8 @@ export const voidFunction = (contenido, parametersFunction) => {
       srtfunction = `void ${parametersFunction[0]} \( char* ${parametrosSeparados[0]}, int ${parametrosSeparados[1]} \{ ${comparation.print}(${parametersFunction[1]}; }`;
       let elemento = document.getElementById("contenido-archivo");
       elemento.textContent += srtfunction;
+      callFunction.push(srtfunction);
+      isFunction();
     }
   } catch (error) {
     console.log("hubo un error inesperado", error);

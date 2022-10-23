@@ -7,6 +7,7 @@ import { handleErrors } from "../handleComprobation/declarationVariable.js";
 import { checkParameterDeclarated } from "../handleComprobation/checkParameterDeclarated.js";
 import { isFunction } from "../index.js";
 import { isMultFunction } from "../functions/multi.js";
+import { callFunction } from "../index.js";
 
 export const returnWithFunction = (contenido, parametersFunction) => {
   //Separamos el tetxo en lineas
@@ -29,13 +30,18 @@ export const returnWithFunction = (contenido, parametersFunction) => {
 };
 
 export const isVariableDeclaration = (firtstLine) => {
+  // debugger;
+  console.log("DESDE ACAAAAA", firtstLine);
+  // const declarationVariableGeneralExpe =
+  //   /([a-zA-z][a-zA-Z0-9_]+)(\s*)=(\s*)(([a-zA-Z]+\s*\(\s*[a-z]+\s*\(\s*"(\s*[a-zA-Z0-9]*\s*)*(\:|)\s*"\s*\){2})|((int)(?!\())|"\s*.*\s*"|([0-9]+[a-zA-Z]*)+|([a-zA-Z]+((\[[0-9]\])*))|\[\]|\{\}|[a-zA-Z]+\s*[+]\s*[a-zA-Z]+\s*([[]\s*[a-z]*[0-9]*\s*]+))/g;
   const declarationVariableGeneralExpe =
-    /([a-zA-z][a-zA-Z0-9_]+)(\s*)=(\s*)(([a-zA-Z]+\s*\(\s*[a-z]+\s*\(\s*"(\s*[a-zA-Z0-9]*\s*)*(\:|)\s*"\s*\){2})|((int)(?!\())|"\s*.*\s*"|([0-9]+[a-zA-Z]*)+|([a-zA-Z]+((\[[0-9]\])*))|\[\]|\{\}|[a-zA-Z]+\s*[+]\s*[a-zA-Z]+\s*([[]\s*[a-z]*[0-9]*\s*]+))/g;
+    /([a-zA-z][a-zA-Z0-9_]+)(\s*)=(\s*)((int\s*\(\s*input\s*\(\s*"(\s*[a-zA-Z0-9]*\s*)*(\:|)\s*"\s*\){2})|((int)(?!\())|(([a-zA-Z0-9]+)$(?!\())|"\s*.*\s*"|([0-9]+[a-zA-Z]*)+|([a-zA-Z]+((\[[0-9]\])*))|\[\]|\{\}|[a-zA-Z]+\s*[+]\s*[a-zA-Z]+\s*([[]\s*[a-z]*[0-9]*\s*]+))/g;
   const bool = true;
-  if (declarationVariableGeneralExpe.test(firtstLine)) return bool;
-  // if (comprobateCaseDeclarationVariable(firtstLine)) {
-  //   return bool;
-  // }
+  if (declarationVariableGeneralExpe.test(firtstLine)) {
+    return bool;
+  } else {
+    console.error(`Hay un ERROR En ${firtstLine}`);
+  }
 };
 
 const typeVariable = (lineaSeparada, parametersFunction, code) => {
@@ -199,7 +205,6 @@ const isArrayFunction = (
       declarationVariable,
       codeCleanLine
     );
-    console.log("si ess un for valido y LOS DATOS SIG SON CORRECTOS");
   } else {
     console.error("LOS DATOS SUBYACENTES TIENEN ERROR");
   }
@@ -212,7 +217,7 @@ const lineAndLine = (
   declarationVariable,
   codeCleanLineFor
 ) => {
-  console.log(codeCleanLineFor, "AQUIIIIIIIIIIIIIIIiii");
+  // debugger;
   //obtener desde donde empieza la iteraciond e for
   let numberIterationFor = codeCleanLineFor.split(",")[0].split("(")[1].trim();
   const codeInPrintf = codeClean1.split(/"/)[1].trim();
@@ -224,8 +229,11 @@ const lineAndLine = (
     .split("for")[1]
     .trim();
 
+  let expre =
+    /([a-zA-z][a-zA-Z0-9_]+)(\s*)=(\s*)(int\s*\(\s*input\s*\(\s*"(\s*[a-zA-Z0-9]*\s*)*(\:|)\s*"\s*\){2})/g;
   //funcion para coprobar la primera linea
-  if (codeClean1.includes("int") && codeClean1.includes("input")) {
+  // debugger;
+  if (expre.test(codeClean1)) {
     let imprimir = `
     int *${parametersFunction[0]}(int ${parameterFor}){
     static int* ${variableArr};
@@ -240,6 +248,9 @@ const lineAndLine = (
     }`;
     let elemento = document.getElementById("contenido-archivo");
     elemento.textContent += imprimir;
+    callFunction.push(imprimir);
     isFunction();
+  } else {
+    console.error(`VAYA PARECE QUE HAY UN ERROR EN ${codeClean1.trim()}`);
   }
 };
