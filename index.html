@@ -4,25 +4,32 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/styles.css">
     <title>Compilador</title>
   </head>
   <body>
-    <h1>compilador</h1>
-    <input type="file" id="file-input" />
-    <h3>Resultado</h3>
-    <p id="contenido-archivo"></p>
-    <p id="cabeceras">
-      #include&lt;stdio.h&gt;
-    </p>
-    <p id="funciones">
+    <div class="error hero"  id="error">
+      <h1>!Error</h1>
+      <p>AQUI DESCRIPCION DEL ERROR</p>
+    </div>
+    <div class="hero">
+      <h1>compilador</h1>
+      <input type="file" id="file-input" />
+      <h3>Resultado</h3>
+      <p id="contenido-archivo"></p>
+      <p id="cabeceras">
+        #include&lt;stdio.h&gt;
+      </p>
+      <p id="funciones">
 
-    </p>
-    <p id="main">
-      int main(){
-        <p id="mainContenido"></p>
-        return 0; <br>
-      }
-    </p>
+      </p>
+      <p id="main">
+        int main(){
+          <p id="mainContenido"></p>
+          return 0; <br>
+        }
+      </p>
+  </div>
   </body>
   <script src="index.js" type="module"></script>
 </html>

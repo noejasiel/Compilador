@@ -3,6 +3,7 @@ import { isEmptyLine } from "../utilities/isEmtyLine.js";
 import { callFunction, isFunction } from "../index.js";
 import { handleErrors } from "../handleComprobation/handleErrors.js";
 import { addElementInDom } from "../funcionalidades/addElementInDom.js";
+import { handleErrorsDisplay } from "../handleComprobation/handleErrorsDisplay.js";
 
 export const isMultFunction = (
   codeClean,
@@ -98,10 +99,10 @@ const lineAndLine = (
       return ${variableOriginalDeclaration};
   }
     `;
+    callFunction.push(imprimir);
     addElementInDom(imprimir);
     // let elemento = document.getElementById("funciones");
     // elemento.textContent += imprimir;
-    callFunction.push(imprimir);
     isFunction();
   }
 };
@@ -114,32 +115,39 @@ const handleErrorVariable = (
   variableMultiplication,
   variableReturn
 ) => {
-  console.log("VARIABLE", variableReturn);
-  let bool = true;
-  let count = 0;
-  if (variableInDeclaration === variableIteratorFor) {
-    count += 1;
-  } else {
-    console.error(`LA VARIABLE ${variableInDeclaration} no esta definida`);
+  try {
+    let bool = true;
+    let count = 0;
+    if (variableInDeclaration.trim() === variableIteratorFor.trim()) {
+      count += 1;
+    } else {
+      throw new Error(`LA VARIABLE ${variableInDeclaration} no esta definida`);
+    }
+    if (
+      variableOriginalDeclaration.trim() ===
+      variableMultiplicationIguality.trim()
+    ) {
+      count += 1;
+    } else {
+      throw new Error(
+        `LA VARIABLE ${variableMultiplicationIguality} no esta definida`
+      );
+    }
+    if (variableOriginalDeclaration.trim() == variableMultiplication.trim()) {
+      count += 1;
+    } else {
+      throw new Error(`LA VARIABLE ${variableMultiplication} no esta definida`);
+    }
+    if (variableOriginalDeclaration.trim() == variableReturn.trim()) {
+      count += 1;
+    } else {
+      throw new Error(`LA VARIABLE ${variableReturn} no esta definida`);
+    }
+    if (count == 4) return bool;
+  } catch (error) {
+    console.error(error.message);
+    handleErrorsDisplay(error);
   }
-  if (variableOriginalDeclaration === variableMultiplicationIguality) {
-    count += 1;
-  } else {
-    console.error(
-      `LA VARIABLE ${variableMultiplicationIguality} no esta definida`
-    );
-  }
-  if (variableOriginalDeclaration == variableMultiplication) {
-    count += 1;
-  } else {
-    console.error(`LA VARIABLE ${variableMultiplication} no esta definida`);
-  }
-  if (variableOriginalDeclaration == variableReturn) {
-    count += 1;
-  } else {
-    console.error(`LA VARIABLE ${variableReturn} no esta definida`);
-  }
-  if (count == 4) return bool;
 };
 
 const handleErrorParameter = (

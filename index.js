@@ -5,6 +5,7 @@ import { countFunctions } from "./utilities/countFunctions.js";
 import { arrPrimary } from "./additionals/arrPrimary.js";
 import { comprobateIdentation } from "./funcionalidades/comprobateIdentation.js";
 import { mainMenu } from "./functions/mainMenu.js";
+import { handleErrorsDisplay } from "./handleComprobation/handleErrorsDisplay.js";
 
 export let callFunction = [];
 var cout = 1;
@@ -25,9 +26,10 @@ function leerArchivo(e) {
     let contenido = e.target.result;
     contenido = contenido.split("def");
     arrPrimary.push(contenido);
-    let main = arrPrimary[0][arrPrimary[0].length - 1]
-      .split("return")[1]
-      .split("\r\n");
+    // let main = arrPrimary[0][arrPrimary[0].length - 1]
+    //   .split("return")[1]
+    //   .split("\r\n");
+    //   mainMenu(main);
     //pinta contenido en html
     // mostrarContenido(contenido);
     //llamando a la funcion que
@@ -36,7 +38,6 @@ function leerArchivo(e) {
     //   isFunction(1);
     // }
     isFunction(1);
-    mainMenu(main);
   };
   lector.readAsText(archivo);
 }
@@ -49,33 +50,40 @@ function mostrarContenido(contenido) {
 // dividir funciones en arreglos
 // diferentes para trabajarlas con facilidad
 export const isFunction = () => {
-  // debugger;
-  // RECORRERA EL ARREGLO QUE CONTINE LAS FUNCIONES Y LO IMPRIMIRA
-  if (arrPrimary[0][cout] != undefined) {
-    let imprimir = arrPrimary[0][cout];
-    cout = cout + 1;
-    //ya tenemos la funcion completa añadiendole def
-    imprimir = "def " + imprimir;
-    let functionResult = comprobarFuncion(imprimir);
-    console.log(comprobarFuncion(imprimir), functionResult, "desde aqui");
-    if (functionResult) {
-      //si funcion correcta hay que ver si
-      // su contenido es correcto
-      //Y SI SU IDENTACION ES CORRECTA
-      console.log(comprobateIdentation(imprimir));
-      if (comprobateIdentation(imprimir)) {
-        readContent(functionResult);
+  try {
+    if (arrPrimary[0][cout] != undefined) {
+      let imprimir = arrPrimary[0][cout];
+      cout = cout + 1;
+      //ya tenemos la funcion completa añadiendole def
+      imprimir = "def " + imprimir;
+      let functionResult = comprobarFuncion(imprimir);
+      console.log(comprobarFuncion(imprimir), functionResult, "desde aqui");
+      if (functionResult) {
+        //si funcion correcta hay que ver si
+        // su contenido es correcto
+        //Y SI SU IDENTACION ES CORRECTA
+        console.log(comprobateIdentation(imprimir));
+        if (comprobateIdentation(imprimir)) {
+          readContent(functionResult);
+        } else {
+          throw new Error("HAY UN PROBLEMA DE IDENTACION");
+        }
       } else {
-        console.error("HAY UN PROBLEMA DE IDENTACION");
+        throw new Error(
+          `ERROR, LA FUNCION NO ES CORRECTA ${imprimir} EN LA LINEA ${imprimir[0]} `
+        );
       }
     } else {
-      console.error(
-        `ERROR, LA FUNCION NO ES CORRECTA ${imprimir} EN LA LINEA ${imprimir[0]} `
-      );
+      let main = arrPrimary[0][arrPrimary[0].length - 1]
+        .split("return")[1]
+        .split("\r\n");
+      mainMenu(main);
     }
-  } else {
-    console.error("SE ACABOOO");
+  } catch (error) {
+    console.error(error.message);
+    handleErrorsDisplay(error);
   }
+  // RECORRERA EL ARREGLO QUE CONTINE LAS FUNCIONES Y LO IMPRIMIRA
 };
 
 const comprobarFuncion = (funcion) => {
@@ -83,7 +91,7 @@ const comprobarFuncion = (funcion) => {
   let funcionLimpia = funcion.replace("\r | \n", "");
   let regex =
     // /^def\s+[a-zA-Z]+\([a-zA-Z]*((\s*)([a-zA-z-_]*)(\,?))*[^,]\)\:$/gm;
-    /^def\s+[a-zA-Z]+\(([a-zA-z]*)((\s*|\,)?((\s*)[a-zA-Z]+)(\s*|\,)?)*(\)\:{1})/gm;
+    /^def\s+[a-zA-Z]+\(([a-zA-z]*)((\s*|\,)?((\s*)[a-zA-Z]+)(\s*|\,)?)*(\)\:$)/gm;
   //si hay un macth el text con la Exp me devuelve un arreglo de esta
   // let result = funcionLimpia.match(regex);
   //hasta aqui ya es una funcion casi 100%
@@ -107,6 +115,7 @@ const readContent = (contenido) => {
   // si hay otra funcion se vera que hay que hacer
   console.log(namesArr[0].split(/\(/));
   //agrego el nombre de la funcion a un array global
+  // debugger;
   callFunction.push(namesArr[0].split(/\(/)[0]);
   let parametersFunction = namesArr[0].split(/\(/);
   console.log(callFunction);

@@ -1,5 +1,5 @@
 def impresion(mensaje,informacion ):
-    print(mensaje,informacion)
+    print(mensaje,informacion) #fghjkml,l 
 
 def llenarLista(longitud):
     Contenedor=[]
@@ -10,7 +10,7 @@ def llenarLista(longitud):
 
 def sumatoria(Lista):
     suma=0
-    for _ in range(0,len(Lista)):
+    for   _      in range(0,len(Lista)):
         suma=suma+Lista[_]
     return suma
 

@@ -1,5 +1,6 @@
 import { isEmptyLine } from "../utilities/isEmtyLine.js";
 import { caseForIdentation } from "../utilities/caseForIdentation.js";
+import { handleErrorsDisplay } from "../handleComprobation/handleErrorsDisplay.js";
 
 const keyWords = {
   def: 0,
@@ -102,6 +103,7 @@ const comprobateCase = (newArray) => {
     }
   } catch (error) {
     console.error(error.message);
+    handleErrorsDisplay(error);
     return false;
   }
 };

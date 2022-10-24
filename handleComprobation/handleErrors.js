@@ -17,25 +17,27 @@ export const handleErrors = (
   );
   let count = 0;
   let bool = true;
-
-  if (variableInDeclaration === variableIteratorFor) {
+  debugger;
+  if (variableInDeclaration.trim() === variableIteratorFor.trim()) {
     count += 1;
   } else {
     console.error(`LA VARIABLE ${variableInDeclaration} no esta definida`);
   }
-  if (variableOriginalDeclaration === variableMultiplicationIguality) {
+  if (
+    variableOriginalDeclaration.trim() === variableMultiplicationIguality.trim()
+  ) {
     count += 1;
   } else {
     console.error(
       `LA VARIABLE ${variableMultiplicationIguality} no esta definida`
     );
   }
-  if (variableOriginalDeclaration == variableMultiplication) {
+  if (variableOriginalDeclaration.trim() == variableMultiplication.trim()) {
     count += 1;
   } else {
     console.error(`LA VARIABLE ${variableMultiplication} no esta definida`);
   }
-  if (variableOriginalDeclaration == variableReturn) {
+  if (variableOriginalDeclaration.trim() == variableReturn.trim()) {
     count += 1;
   } else {
     console.error(`LA VARIABLE ${variableReturn} no esta definida`);

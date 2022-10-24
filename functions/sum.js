@@ -6,6 +6,7 @@ import { isFunction } from "../index.js";
 import { arrPrimary } from "../additionals/arrPrimary.js";
 import { getDataReturnVariable } from "./multi.js";
 import { addElementInDom } from "../funcionalidades/addElementInDom.js";
+import { handleErrorsDisplay } from "../handleComprobation/handleErrorsDisplay.js";
 // import { handleErrors } from "../handleComprobation/handleErrors.js";
 
 export const isSumFunction = (
@@ -53,6 +54,7 @@ const lineAndLine = (
   let nameParameter = parametersFunction[1].split(")")[0].trim();
   arrayDeclaratedParametersFunctions.push(nameParameter);
   //obtenemos nombre de mi declaraion de variable despues del for
+  // debugger;
   let variableMultiplicationParameter = codeClean1
     .split("+")[1]
     .split("[")[0]
@@ -72,63 +74,59 @@ const lineAndLine = (
   let variableMultiplication = codeClean1.split("+")[0].split("=")[1].trim();
   let variableMultiplicationIguality = codeClean1.split("=")[0].trim();
   let variableReturn = getDataReturnVariable(codeComplete);
-  console.log(
-    variableInDeclaration,
-    variableIteratorFor,
-    variableOriginalDeclaration,
-    variableMultiplication,
-    variableMultiplicationIguality,
-    variableReturn,
-    "HEERERERET"
-  );
-  if (
-    handleErrors(
-      variableInDeclaration,
-      variableIteratorFor,
-      variableOriginalDeclaration,
-      variableMultiplication,
-      variableMultiplicationIguality,
-      variableReturn
-    ) &&
-    handleErrorParameter(
-      nameParameter,
-      variableMultiplicationParameter,
-      variableCodeFor
-    )
-  ) {
-    console.log("ENTRO AQUI X2");
-
-    // nombre de la declaracion de la variable
-    // let variableOriginalDeclaration = declarationVariable.split("=")[0].trim();
-    console.log(variableOriginalDeclaration, "DESDE ACAAA");
-    let expre = new RegExp(
-      variableOriginalDeclaration +
-        "\\s*\\=\\s*" +
+  try {
+    if (
+      handleErrors(
+        variableInDeclaration,
+        variableIteratorFor,
+        variableOriginalDeclaration,
+        variableMultiplication,
+        variableMultiplicationIguality,
+        variableReturn
+      ) &&
+      handleErrorParameter(
+        nameParameter,
+        variableMultiplicationParameter,
+        variableCodeFor
+      )
+    ) {
+      // nombre de la declaracion de la variable
+      // let variableOriginalDeclaration = declarationVariable.split("=")[0].trim();
+      console.log(variableOriginalDeclaration, "DESDE ACAAA");
+      let expre = new RegExp(
         variableOriginalDeclaration +
-        "\\s*\\+\\s*" +
-        variableMultiplicationParameter +
-        "\\s*\\[\\s*" +
-        variableIteratorFor +
-        "\\s*\\]",
-      "gm"
-    );
-    if (expre.test(codeClean1)) {
+          "\\s*\\=\\s*" +
+          variableOriginalDeclaration +
+          "\\s*\\+\\s*" +
+          variableMultiplicationParameter +
+          "\\s*\\[\\s*" +
+          variableIteratorFor +
+          "\\s*\\]$",
+        "gm"
+      );
+
+      let datatta = expre.test(codeClean1.trim());
+      //comprobar si la linea esat bien si no mada error
+      if (!datatta) {
+        throw new Error(`Rayos parece que ${codeClean1.trim()} no es correcta`);
+      }
+
       console.log("VALOR", countFunctions, countFunctions + 1);
       // countFunctions = 2;
 
       let imprimir = `
-      int ${parametersFunction[0]}(int *${variableMultiplicationParameter}){
-      int ${variableOriginalDeclaration} = 0;
-      int i =0;
-      while(${nameParameter}[i] != -1 ){
-          i +=1;
-      }
-      int ${variableIteratorFor} = 0;
-        for(${variableIteratorFor} = 0; ${variableIteratorFor} < i; ${variableIteratorFor}++){
-            suma += ${nameParameter}[${variableIteratorFor}];
+        int ${parametersFunction[0]}(int *${variableMultiplicationParameter}){
+        int ${variableOriginalDeclaration} = 0;
+        int i =0;
+        while(${nameParameter}[i] != -1 ){
+            i +=1;
         }
-      return ${variableOriginalDeclaration};
-      }`;
+        int ${variableIteratorFor} = 0;
+          for(${variableIteratorFor} = 0; ${variableIteratorFor} < i; ${variableIteratorFor}++){
+              suma += ${nameParameter}[${variableIteratorFor}];
+          }
+        return ${variableOriginalDeclaration};
+        }`;
       addElementInDom(imprimir);
       // let elemento = document.getElementById("funciones");
       // elemento.textContent += imprimir;
@@ -136,11 +134,12 @@ const lineAndLine = (
       countFunctions + 1;
       isFunction();
       // debugger;
+    } else {
+      throw new Error(`Rayos  algo no salio bien`);
     }
-  } else {
-    console.error(
-      `Rayos la varible ---> ${variableMultiplicationParameter} <---- o -----> ${variableInDeclaration} <---- no esta declarada`
-    );
+  } catch (error) {
+    console.error(error.message);
+    handleErrorsDisplay(error);
   }
 };
 
@@ -152,32 +151,39 @@ const handleErrors = (
   variableMultiplicationIguality,
   variableReturn
 ) => {
-  let count = 0;
-  let bool = true;
-
-  if (variableInDeclaration === variableIteratorFor) {
-    count += 1;
-  } else {
-    console.error(`LA VARIABLE ${variableInDeclaration} no esta definida`);
+  try {
+    let count = 0;
+    let bool = true;
+    if (variableInDeclaration.trim() === variableIteratorFor.trim()) {
+      count += 1;
+    } else {
+      throw new Error(`LA VARIABLE ${variableInDeclaration} no esta definida`);
+    }
+    if (
+      variableOriginalDeclaration.trim() ===
+      variableMultiplicationIguality.trim()
+    ) {
+      count += 1;
+    } else {
+      throw new Error(
+        `LA VARIABLE ${variableMultiplicationIguality} no esta definida`
+      );
+    }
+    if (variableOriginalDeclaration.trim() == variableMultiplication.trim()) {
+      count += 1;
+    } else {
+      throw new Error(`LA VARIABLE ${variableMultiplication} no esta definida`);
+    }
+    if (variableOriginalDeclaration.trim() == variableReturn.trim()) {
+      count += 1;
+    } else {
+      throw new Error(`LA VARIABLE ${variableReturn} no esta definida`);
+    }
+    if (count == 4) return true;
+  } catch (error) {
+    console.error(error.message);
+    handleErrorsDisplay(error);
   }
-  if (variableOriginalDeclaration === variableMultiplicationIguality) {
-    count += 1;
-  } else {
-    console.error(
-      `LA VARIABLE ${variableMultiplicationIguality} no esta definida`
-    );
-  }
-  if (variableOriginalDeclaration == variableMultiplication) {
-    count += 1;
-  } else {
-    console.error(`LA VARIABLE ${variableMultiplication} no esta definida`);
-  }
-  if (variableOriginalDeclaration == variableReturn) {
-    count += 1;
-  } else {
-    console.error(`LA VARIABLE ${variableReturn} no esta definida`);
-  }
-  if (count == 4) return true;
 };
 
 const handleErrorParameter = (
@@ -185,25 +191,25 @@ const handleErrorParameter = (
   variableDeclaration,
   variableMultiplicationParameter
 ) => {
-  console.log(
-    nameParameter,
-    variableDeclaration,
-    variableMultiplicationParameter,
-    "DESDE PARAMETER"
-  );
-  let bool = true;
-  let count = 0;
-  if (nameParameter === variableDeclaration) {
-    count += 1;
-  } else {
-    console.error(`LA VARIABLE ${variableDeclaration} no esta definida`);
+  try {
+    let bool = true;
+    let count = 0;
+    // debugger;
+    if (nameParameter === variableDeclaration) {
+      count += 1;
+    } else {
+      throw new Error(`LA VARIABLEf ${variableDeclaration} no esta definida`);
+    }
+    if (nameParameter === variableMultiplicationParameter) {
+      count += 1;
+    } else {
+      throw new Error(
+        `LA VARIABLE ${variableMultiplicationParameter} no esta definida`
+      );
+    }
+    if (count == 2) return bool;
+  } catch (error) {
+    console.error(error.message);
+    handleErrorsDisplay(error);
   }
-  if (nameParameter === variableMultiplicationParameter) {
-    count += 1;
-  } else {
-    console.error(
-      `LA VARIABLE ${variableMultiplicationParameter} no esta definida`
-    );
-  }
-  if (count == 2) return bool;
 };

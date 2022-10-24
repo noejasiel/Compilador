@@ -1,5 +1,6 @@
 import { addElementInDom } from "../funcionalidades/addElementInDom.js";
 import { addElementMainDom } from "../funcionalidades/addElementMainDom.js";
+import { handleErrorsDisplay } from "../handleComprobation/handleErrorsDisplay.js";
 import { callFunction } from "../index.js";
 
 //variables declaradas solo para tener el dato
@@ -36,6 +37,7 @@ export const mainMenu = (main) => {
       lineAndLine(main);
     }
   } catch (error) {
+    handleErrorsDisplay(error);
     console.error(error.message);
     return false;
   }
@@ -104,7 +106,9 @@ const lineAndLine = (main) => {
         addElementMainDom(functionC);
       }
       // case impresion function void
+      // debugger;
       if (expreVoidImpresion.test(main[i])) {
+        // debugger;
         //nombre de la funcion
         let nameFunctionImpression = main[i].split("(")[0];
         //lo que trae la funcion
@@ -220,10 +224,12 @@ const lineAndLine = (main) => {
     }
   } catch (error) {
     console.error(error.message);
+    handleErrorsDisplay(error);
   }
 };
 
 const getDataArray = (nameFunctionImpression) => {
+  // debugger;
   let data = callFunction.find((element) => element == nameFunctionImpression);
   return data;
 };

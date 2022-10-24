@@ -3,6 +3,7 @@ import { comparation } from "../additionals/dictionary.js";
 import { isFunction } from "../index.js";
 import { callFunction } from "../index.js";
 import { addElementInDom } from "./addElementInDom.js";
+import { handleErrorsDisplay } from "../handleComprobation/handleErrorsDisplay.js";
 
 export const voidFunction = (contenido, parametersFunction) => {
   try {
@@ -47,10 +48,11 @@ export const voidFunction = (contenido, parametersFunction) => {
     srtfunction = `void ${parametersFunction[0]} \( char* ${parametrosSeparados[0]}, int ${parametrosSeparados[1]} \{ ${comparation.print}(${parametersFunction[1]}; }`;
     // let elemento = document.getElementById("funciones");
     // elemento.textContent += srtfunction;
-    addElementInDom(srtfunction);
     callFunction.push(srtfunction);
+    addElementInDom(srtfunction);
     isFunction();
   } catch (error) {
     console.error(error.message);
+    handleErrorsDisplay(error);
   }
 };

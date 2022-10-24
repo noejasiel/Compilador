@@ -9,40 +9,52 @@ import { isFunction } from "../index.js";
 import { isMultFunction } from "../functions/multi.js";
 import { callFunction } from "../index.js";
 import { addElementInDom } from "./addElementInDom.js";
+import { handleErrorsDisplay } from "../handleComprobation/handleErrorsDisplay.js";
 
 export const returnWithFunction = (contenido, parametersFunction) => {
-  //Separamos el tetxo en lineas
-  let lineaSeparada = contenido.split("\r");
-  let contador = 1;
-  // envia la linea siguiente avr si no esta vacia COMPROBAR
-  // SI NO HAY INEAS RARAS, ---> VER LIBRETAS <---
-  let newCleanCode = isEmptyLine(lineaSeparada, contador);
-  //comprobar si la linea sig declara alguntipo de variable
-  if (isVariableDeclaration(newCleanCode[1], lineaSeparada)) {
-    console.log(
-      "SOY UNA DECLARSCION DE VARIABLE VALIDA",
-      newCleanCode[1],
-      lineaSeparada
-    );
-    typeVariable(newCleanCode[1], parametersFunction, newCleanCode);
-  } else {
-    console.error("error se esperaba una declaracion de variable");
+  try {
+    let lineaSeparada = contenido.split("\r");
+    let contador = 1;
+    // envia la linea siguiente avr si no esta vacia COMPROBAR
+    // SI NO HAY INEAS RARAS, ---> VER LIBRETAS <---
+    let newCleanCode = isEmptyLine(lineaSeparada, contador);
+    //comprobar si la linea sig declara alguntipo de variable
+    if (isVariableDeclaration(newCleanCode[1], lineaSeparada)) {
+      console.log(
+        "SOY UNA DECLARSCION DE VARIABLE VALIDA",
+        newCleanCode[1],
+        lineaSeparada
+      );
+      typeVariable(newCleanCode[1], parametersFunction, newCleanCode);
+    } else {
+      throw new Error("error se esperaba una declaracion de variable");
+
+      // console.error("error se esperaba una declaracion de variable");
+    }
+  } catch (error) {
+    console.error(error.message);
+    handleErrorsDisplay(error);
   }
+  //Separamos el tetxo en lineas
 };
 
 export const isVariableDeclaration = (firtstLine) => {
-  // debugger;
-  console.log("DESDE ACAAAAA", firtstLine);
+  try {
+    const declarationVariableGeneralExpe =
+      /([a-zA-z][a-zA-Z0-9_]+)(\s*)=(\s*)((int\s*\(\s*input\s*\(\s*"(\s*[a-zA-Z0-9]*\s*)*(\:|)\s*"\s*\){2})|((int)(?!\())|(([a-zA-Z0-9]+)$(?!\())|"\s*.*\s*"|([0-9]+[a-zA-Z]*)+|([a-zA-Z]+((\[[0-9]\])*))|\[\]|\{\}|[a-zA-Z]+\s*[+]\s*[a-zA-Z]+\s*([[]\s*[a-z]*[0-9]*\s*]+))/g;
+    const bool = true;
+    if (declarationVariableGeneralExpe.test(firtstLine)) {
+      return bool;
+    } else {
+      throw new Error(`Hay un ERROR En ${firtstLine.trim()}`);
+      // console.error(`Hay un ERROR En ${firtstLine.trim()}`);
+    }
+  } catch (error) {
+    console.error(error.message);
+    handleErrorsDisplay(error);
+  }
   // const declarationVariableGeneralExpe =
   //   /([a-zA-z][a-zA-Z0-9_]+)(\s*)=(\s*)(([a-zA-Z]+\s*\(\s*[a-z]+\s*\(\s*"(\s*[a-zA-Z0-9]*\s*)*(\:|)\s*"\s*\){2})|((int)(?!\())|"\s*.*\s*"|([0-9]+[a-zA-Z]*)+|([a-zA-Z]+((\[[0-9]\])*))|\[\]|\{\}|[a-zA-Z]+\s*[+]\s*[a-zA-Z]+\s*([[]\s*[a-z]*[0-9]*\s*]+))/g;
-  const declarationVariableGeneralExpe =
-    /([a-zA-z][a-zA-Z0-9_]+)(\s*)=(\s*)((int\s*\(\s*input\s*\(\s*"(\s*[a-zA-Z0-9]*\s*)*(\:|)\s*"\s*\){2})|((int)(?!\())|(([a-zA-Z0-9]+)$(?!\())|"\s*.*\s*"|([0-9]+[a-zA-Z]*)+|([a-zA-Z]+((\[[0-9]\])*))|\[\]|\{\}|[a-zA-Z]+\s*[+]\s*[a-zA-Z]+\s*([[]\s*[a-z]*[0-9]*\s*]+))/g;
-  const bool = true;
-  if (declarationVariableGeneralExpe.test(firtstLine)) {
-    return bool;
-  } else {
-    console.error(`Hay un ERROR En ${firtstLine}`);
-  }
 };
 
 const typeVariable = (lineaSeparada, parametersFunction, code) => {
@@ -84,35 +96,41 @@ const verifyFunctionFill = (
   //indicar si hay un for, si no decir que esperaba uno y dara error ----Z>>>> OJO AQUIIII
 
   //se comprueba si la funcion for es aceptada
-  if (isValidFor(codeClean[2])) {
-    console.log("ES FOR VALIDO");
-    if (typeFunction == 1) {
-      //llenar lista
-      isArrayFunction(
-        codeClean,
-        parametersFunction,
-        declarationVariable,
-        codeClean[2],
-        code
-      );
-    } else if (typeFunction == 2) {
-      isSumFunction(
-        codeClean,
-        parametersFunction,
-        declarationVariable,
-        codeClean[2]
-      );
-    } else if (typeFunction == 3) {
-      // debugger;
-      isMultFunction(
-        codeClean,
-        parametersFunction,
-        declarationVariable,
-        codeClean[2]
-      );
+  try {
+    if (isValidFor(codeClean[2])) {
+      console.log("ES FOR VALIDO");
+      if (typeFunction == 1) {
+        //llenar lista
+        isArrayFunction(
+          codeClean,
+          parametersFunction,
+          declarationVariable,
+          codeClean[2],
+          code
+        );
+      } else if (typeFunction == 2) {
+        isSumFunction(
+          codeClean,
+          parametersFunction,
+          declarationVariable,
+          codeClean[2]
+        );
+      } else if (typeFunction == 3) {
+        // debugger;
+        isMultFunction(
+          codeClean,
+          parametersFunction,
+          declarationVariable,
+          codeClean[2]
+        );
+      }
+    } else {
+      throw new Error(`La Linea ${codeClean[2]} tiene un error`);
+      console.error("La Linea for tiene un error");
     }
-  } else {
-    console.error("La Linea for tiene un error");
+  } catch (error) {
+    console.error(error.message);
+    handleErrorsDisplay(error);
   }
 };
 
@@ -180,6 +198,7 @@ const verifyAppendArr = (
     }
   } catch (error) {
     console.error(error.message);
+    handleErrorsDisplay(error);
   }
 };
 
@@ -190,25 +209,31 @@ const isArrayFunction = (
   codeCleanLine,
   code
 ) => {
-  //si for esta bien verificamos dentro
-  codeClean = isEmptyLine(codeClean, 3);
-  codeClean = isEmptyLine(codeClean, 4);
-  if (
-    isVariableDeclaration(codeClean[3]) &&
-    verifyAppendArr(codeClean[4], codeClean[3], declarationVariable, code) &&
-    checkParameterDeclarated(parametersFunction, code)
-  ) {
-    //si los datos estan bien entonces ya debugeo linea x linea
-    lineAndLine(
-      codeClean[3],
-      codeClean[4],
-      parametersFunction,
-      declarationVariable,
-      codeCleanLine
-    );
-  } else {
-    console.error("LOS DATOS SUBYACENTES TIENEN ERROR");
+  try {
+    codeClean = isEmptyLine(codeClean, 3);
+    codeClean = isEmptyLine(codeClean, 4);
+    if (
+      isVariableDeclaration(codeClean[3]) &&
+      verifyAppendArr(codeClean[4], codeClean[3], declarationVariable, code) &&
+      checkParameterDeclarated(parametersFunction, code)
+    ) {
+      //si los datos estan bien entonces ya debugeo linea x linea
+      lineAndLine(
+        codeClean[3],
+        codeClean[4],
+        parametersFunction,
+        declarationVariable,
+        codeCleanLine
+      );
+    } else {
+      throw new Error("LOS DATOS SUBYACENTES TIENEN ERROR");
+      // console.error("LOS DATOS SUBYACENTES TIENEN ERROR");
+    }
+  } catch (error) {
+    console.error(error.message);
+    handleErrorsDisplay(error);
   }
+  //si for esta bien verificamos dentro
 };
 
 const lineAndLine = (
