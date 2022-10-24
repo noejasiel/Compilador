@@ -32,9 +32,11 @@ function leerArchivo(e) {
     // mostrarContenido(contenido);
     //llamando a la funcion que
     // completara funciones
-    if (mainMenu(main)) {
-      isFunction(1);
-    }
+    // if (mainMenu(main)) {
+    //   isFunction(1);
+    // }
+    isFunction(1);
+    mainMenu(main);
   };
   lector.readAsText(archivo);
 }

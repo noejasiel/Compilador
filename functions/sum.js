@@ -5,7 +5,7 @@ import { countFunctions } from "../utilities/countFunctions.js";
 import { isFunction } from "../index.js";
 import { arrPrimary } from "../additionals/arrPrimary.js";
 import { getDataReturnVariable } from "./multi.js";
-import { callFunction } from "../index.js";
+import { addElementInDom } from "../funcionalidades/addElementInDom.js";
 // import { handleErrors } from "../handleComprobation/handleErrors.js";
 
 export const isSumFunction = (
@@ -121,7 +121,6 @@ const lineAndLine = (
       int ${variableOriginalDeclaration} = 0;
       int i =0;
       while(${nameParameter}[i] != -1 ){
-          printf("enrtro %d \n", ${nameParameter}[i]);
           i +=1;
       }
       int ${variableIteratorFor} = 0;
@@ -130,12 +129,13 @@ const lineAndLine = (
         }
       return ${variableOriginalDeclaration};
       }`;
-      let elemento = document.getElementById("contenido-archivo");
-      elemento.textContent += imprimir;
+      addElementInDom(imprimir);
+      // let elemento = document.getElementById("funciones");
+      // elemento.textContent += imprimir;
       // debugger;
       countFunctions + 1;
-      callFunction.push(imprimir);
       isFunction();
+      // debugger;
     }
   } else {
     console.error(

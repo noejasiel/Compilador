@@ -8,6 +8,7 @@ import { checkParameterDeclarated } from "../handleComprobation/checkParameterDe
 import { isFunction } from "../index.js";
 import { isMultFunction } from "../functions/multi.js";
 import { callFunction } from "../index.js";
+import { addElementInDom } from "./addElementInDom.js";
 
 export const returnWithFunction = (contenido, parametersFunction) => {
   //Separamos el tetxo en lineas
@@ -246,8 +247,10 @@ const lineAndLine = (
     ${variableArr}[${parameterFor}] = -1;
     return ${variableArr};
     }`;
-    let elemento = document.getElementById("contenido-archivo");
-    elemento.textContent += imprimir;
+    addElementInDom(imprimir);
+    // let elemento = document.getElementById("funciones");
+    // elemento.innerHTML += imprimir + "</br>";
+    // elemento.innerHTML += "</br>";
     callFunction.push(imprimir);
     isFunction();
   } else {

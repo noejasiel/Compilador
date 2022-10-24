@@ -2,6 +2,7 @@ import { isVariableDeclaration } from "../funcionalidades/returnFunction.js";
 import { isEmptyLine } from "../utilities/isEmtyLine.js";
 import { callFunction, isFunction } from "../index.js";
 import { handleErrors } from "../handleComprobation/handleErrors.js";
+import { addElementInDom } from "../funcionalidades/addElementInDom.js";
 
 export const isMultFunction = (
   codeClean,
@@ -97,8 +98,9 @@ const lineAndLine = (
       return ${variableOriginalDeclaration};
   }
     `;
-    let elemento = document.getElementById("contenido-archivo");
-    elemento.textContent += imprimir;
+    addElementInDom(imprimir);
+    // let elemento = document.getElementById("funciones");
+    // elemento.textContent += imprimir;
     callFunction.push(imprimir);
     isFunction();
   }
