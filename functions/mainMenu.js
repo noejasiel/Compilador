@@ -2,6 +2,8 @@ import { addElementInDom } from "../funcionalidades/addElementInDom.js";
 import { addElementMainDom } from "../funcionalidades/addElementMainDom.js";
 import { handleErrorsDisplay } from "../handleComprobation/handleErrorsDisplay.js";
 import { callFunction } from "../index.js";
+import { commentary } from "../index.js";
+import { isEmptyLine } from "../utilities/isEmtyLine.js";
 
 //variables declaradas solo para tener el dato
 let variablesDeclarated = [];
@@ -10,25 +12,33 @@ let variablesUsed = [];
 
 export const mainMenu = (main) => {
   // debugger;
-  console.log(comprobateFunctionVariable(main[2]));
   //pq al momento del splt hay basura
   try {
+    if (!addCommentary(main)) {
+      throw new Error(
+        `VAYA AH OCURRIDO UN ERROR AL MOMEMNTO DE TRATAR CON LOS COMENTARIO`
+      );
+    }
+    main = addCommentary(main);
+    // debugger;
+
     let count = 2;
     let zeroSpaces = /^\s/m;
     while (main[count] != undefined) {
       // debugger;
-      if (!zeroSpaces.test(main[count])) {
+      let newLine = isEmptyLine(main, count);
+      if (!zeroSpaces.test(newLine[count].trim())) {
         if (
-          comprobateFunctionVariable(main[count]) ||
-          comprobateDeclarationVariable(main[count])
+          comprobateFunctionVariable(newLine[count].trim()) ||
+          comprobateDeclarationVariable(newLine[count].trim())
         ) {
           count += 1;
         } else {
-          throw new Error(`VAYA PARECCE QUE ${main[count]} TIENE UN ERROR`);
+          throw new Error(`VAYA PARECCE QUE ${newLine[count]} TIENE UN ERROR`);
         }
       } else {
         throw new Error(
-          `VAYA PARECCE QUE LA IDENTACION ${main[count]} NO ES CORRECTA`
+          `VAYA PARECCE QUE LA IDENTACION ${newLine[count]} NO ES CORRECTA`
         );
       }
     }
@@ -106,7 +116,6 @@ const lineAndLine = (main) => {
         addElementMainDom(functionC);
       }
       // case impresion function void
-      // debugger;
       if (expreVoidImpresion.test(main[i])) {
         // debugger;
         //nombre de la funcion
@@ -189,7 +198,6 @@ const lineAndLine = (main) => {
         console.log(expree.test(main[i]));
         console.log(!expree.test(main[i]));
       }
-
       //case sum y Product
       if (expreSumProductFunction.test(main[i])) {
         // debugger;
@@ -222,6 +230,7 @@ const lineAndLine = (main) => {
         addElementMainDom(functionC);
       }
     }
+    commentsPrint();
   } catch (error) {
     console.error(error.message);
     handleErrorsDisplay(error);
@@ -261,4 +270,54 @@ const existVariableInArrayDeclaration = (variable) => {
     (element) => element == variable
   );
   return variableExist;
+};
+
+const addCommentary = (imprimir) => {
+  // debugger;
+  let expreComentary = /#.*/;
+  let nameFunction;
+  let noDlecarated = /^[a-zA-z]*\s*\(\s*".*"\s*/;
+  let declarated = /[a-zA-z][a-zA-Z0-9_]+\s*=\s*[a-zA-Z]*\s*\(\s*/;
+  let result;
+  for (let i = 2; i < imprimir.length; i++) {
+    if (expreComentary.test(imprimir[i])) {
+      if (noDlecarated.test(imprimir[i])) {
+        if (expreComentary.exec(imprimir[i])[0]) {
+          //añadir nameFunction linea y comentario
+          nameFunction = imprimir[i].split("(")[0].trim();
+          commentary.push(nameFunction);
+          commentary.push(i);
+          commentary.push(expreComentary.exec(imprimir[i])[0]);
+        }
+      }
+      if (declarated.test(imprimir[i])) {
+        if (expreComentary.exec(imprimir[i])[0]) {
+          //añadir nameFunction linea y comentario
+          nameFunction = imprimir[i].split("=")[0].trim();
+          commentary.push(nameFunction);
+          commentary.push(i);
+          commentary.push(expreComentary.exec(imprimir[i])[0]);
+        }
+      }
+      if (/^#.*/.test(imprimir[i].trim())) {
+        commentary.push("main");
+        commentary.push(i);
+        commentary.push(expreComentary.exec(imprimir[i])[0]);
+      }
+      imprimir[i] = imprimir[i].replace(expreComentary, "");
+    }
+  }
+  return imprimir;
+};
+
+const commentsPrint = () => {
+  const father = document.getElementById("comments");
+  debugger;
+  for (let i = 0; i < commentary.length; i += 3) {
+    const p = document.createElement("p");
+    p.textContent += `en la funcion ${commentary[i]} en la linea ${
+      commentary[i + 1]
+    } esta el comentario "${commentary[i + 2]}" `;
+    father.appendChild(p);
+  }
 };

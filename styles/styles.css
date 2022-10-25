@@ -1,6 +1,7 @@
 html {
   margin: 0px;
   box-sizing: 100vh;
+  font-family: "Raleway", sans-serif;
 }
 body {
   background-image: radial-gradient(
@@ -76,7 +77,82 @@ body {
   left: 0;
   right: 0;
   margin: auto;
-  height: 60%;
+  height: max-content;
   z-index: 1;
+  display: flex;
   display: none;
+}
+.contenth1 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.contenth1 h1 {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  size: 3em;
+}
+.border {
+  display: flex;
+  align-items: center;
+  justify-content: centers;
+}
+.border img {
+  margin-right: 0.5em;
+}
+/* .errContenido {
+  padding-top: 6em;
+}
+.border {
+  color: black;
+  /* text-shadow: -1px -1px 0 white, 1px -1px 0 white, 1px 1px 0 white,
+    -1px 1px 0 white; */
+/* } */
+/* .errorr {
+  color: green;
+  animation: errorr 3s ease-in-out infinite;
+}
+@keyframes errorr {
+  0%,
+  100% {
+    clip-path: polygon(
+      0% 47%,
+      10% 48%,
+      33% 54%,
+      54% 60%,
+      70% 61%,
+      84% 59%,
+      100% 52%,
+      100% 100%,
+      0% 100%
+    );
+  }
+  50% {
+    clip-path: polygon(
+      0% 60%,
+      15% 65%,
+      34% 6%,
+      51% 62%,
+      67% 58%,
+      84% 45%,
+      100% 46%,
+      100% 100%,
+      0% 100%
+    );
+  }
+} */
+*/ .Info {
+  color: #043349;
+}
+
+.power {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #043349;
+}
+.power img {
+  margin-right: 0.5em;
 }

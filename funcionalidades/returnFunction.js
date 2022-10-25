@@ -13,17 +13,21 @@ import { handleErrorsDisplay } from "../handleComprobation/handleErrorsDisplay.j
 
 export const returnWithFunction = (contenido, parametersFunction) => {
   try {
-    let lineaSeparada = contenido.split("\r");
+    // debugger;
+    let newContent = contenido.split("\r");
+
+    // let newContent = contenido.split("\r");
     let contador = 1;
+    // debugger;
     // envia la linea siguiente avr si no esta vacia COMPROBAR
     // SI NO HAY INEAS RARAS, ---> VER LIBRETAS <---
-    let newCleanCode = isEmptyLine(lineaSeparada, contador);
+    let newCleanCode = isEmptyLine(newContent, contador);
     //comprobar si la linea sig declara alguntipo de variable
-    if (isVariableDeclaration(newCleanCode[1], lineaSeparada)) {
+    if (isVariableDeclaration(newCleanCode[1], newContent)) {
       console.log(
         "SOY UNA DECLARSCION DE VARIABLE VALIDA",
         newCleanCode[1],
-        lineaSeparada
+        newContent
       );
       typeVariable(newCleanCode[1], parametersFunction, newCleanCode);
     } else {

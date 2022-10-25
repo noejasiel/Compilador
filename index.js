@@ -8,6 +8,7 @@ import { mainMenu } from "./functions/mainMenu.js";
 import { handleErrorsDisplay } from "./handleComprobation/handleErrorsDisplay.js";
 
 export let callFunction = [];
+export let commentary = [];
 var cout = 1;
 
 document
@@ -26,25 +27,10 @@ function leerArchivo(e) {
     let contenido = e.target.result;
     contenido = contenido.split("def");
     arrPrimary.push(contenido);
-    // let main = arrPrimary[0][arrPrimary[0].length - 1]
-    //   .split("return")[1]
-    //   .split("\r\n");
-    //   mainMenu(main);
-    //pinta contenido en html
-    // mostrarContenido(contenido);
-    //llamando a la funcion que
-    // completara funciones
-    // if (mainMenu(main)) {
-    //   isFunction(1);
-    // }
+    //aqui inician las funciones
     isFunction(1);
   };
   lector.readAsText(archivo);
-}
-
-function mostrarContenido(contenido) {
-  let elemento = document.getElementById("contenido-archivo");
-  elemento.innerHTML = contenido;
 }
 
 // dividir funciones en arreglos
@@ -52,18 +38,21 @@ function mostrarContenido(contenido) {
 export const isFunction = () => {
   try {
     if (arrPrimary[0][cout] != undefined) {
+      // isCommentary(arrPrimary[0][cout])
       let imprimir = arrPrimary[0][cout];
       cout = cout + 1;
       //ya tenemos la funcion completa añadiendole def
       imprimir = "def " + imprimir;
-      let functionResult = comprobarFuncion(imprimir);
-      console.log(comprobarFuncion(imprimir), functionResult, "desde aqui");
+      let dgh = addCommentary(imprimir).join("\r");
+      // debugger;
+      let functionResult = comprobarFuncion(dgh);
       if (functionResult) {
         //si funcion correcta hay que ver si
         // su contenido es correcto
         //Y SI SU IDENTACION ES CORRECTA
-        console.log(comprobateIdentation(imprimir));
-        if (comprobateIdentation(imprimir)) {
+        // console.log(comprobateIdentation(imprimir));
+        // debugger;
+        if (comprobateIdentation(functionResult)) {
           readContent(functionResult);
         } else {
           throw new Error("HAY UN PROBLEMA DE IDENTACION");
@@ -88,7 +77,7 @@ export const isFunction = () => {
 
 const comprobarFuncion = (funcion) => {
   //limpio mi funcion de saltos de linea
-  let funcionLimpia = funcion.replace("\r | \n", "");
+  let funcionLimpia = funcion.split("\r\n")[0].trim();
   let regex =
     // /^def\s+[a-zA-Z]+\([a-zA-Z]*((\s*)([a-zA-z-_]*)(\,?))*[^,]\)\:$/gm;
     /^def\s+[a-zA-Z]+\(([a-zA-z]*)((\s*|\,)?((\s*)[a-zA-Z]+)(\s*|\,)?)*(\)\:$)/gm;
@@ -118,8 +107,7 @@ const readContent = (contenido) => {
   // debugger;
   callFunction.push(namesArr[0].split(/\(/)[0]);
   let parametersFunction = namesArr[0].split(/\(/);
-  console.log(callFunction);
-  // comprobateIdentation()
+  // isCommentary(contenido);
   transformFunctionToC(contenido, parametersFunction);
 };
 
@@ -133,4 +121,39 @@ const transformFunctionToC = (contenido, parametersFunction) => {
     //Funcion Void
     voidFunction(contenido, parametersFunction);
   }
+};
+
+const addCommentary = (imprimir) => {
+  let expreComentary = /#.*/;
+  let newContent = imprimir.split("\r");
+  let nameFunction = newContent[0].split("(")[0].split("def")[1].trim();
+
+  //cortar el array
+  let cuteArray = newContent;
+  let cute = 0;
+  for (let i = 0; i < cuteArray.length; i++) {
+    if (cuteArray[i].includes("return")) {
+      cute = i;
+      break;
+    }
+  }
+  if (newContent[cute].includes("return")) {
+    newContent = newContent.splice(0, cute + 1);
+  }
+
+  let result;
+  //limpiamos la funcion que no tenga comentarios
+  for (let i = 0; i < newContent.length; i++) {
+    if (expreComentary.test(newContent[i])) {
+      //traemos el comentario y lo añadimos a un array para ddespues borrarlo
+      if (expreComentary.exec(newContent[i])[0]) {
+        //añadir nameFunction linea y comentario
+        commentary.push(nameFunction);
+        commentary.push(i);
+        commentary.push(expreComentary.exec(newContent[i])[0]);
+      }
+      newContent[i] = newContent[i].replace(expreComentary, "");
+    }
+  }
+  return newContent;
 };

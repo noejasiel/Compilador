@@ -10,7 +10,6 @@ const keyWords = {
 };
 
 export const comprobateIdentation = (textFunction) => {
-  // debugger;
   console.log(textFunction.split("\r\n"), "FROM text");
   let dataSplit = textFunction.split("\r\n");
   let count = 0;
@@ -35,7 +34,6 @@ const comprobateCase = (newArray) => {
   const codeIndexFor = newArray.findIndex(codeFor);
   // debugger;
   try {
-    // debugger;
     if (newArray.length > 3) {
       for (let i = 0; i < newArray.length; i++) {
         // debugger;
