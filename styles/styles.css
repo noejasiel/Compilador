@@ -46,13 +46,13 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   background: rgb(255, 255, 255, 0.1);
   border: 1px solid rgb(255, 255, 255, 0.01);
   border-radius: 10px;
-  box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
-  background: rgba(182, 194, 230, 0.3);
+  box-shadow: 7px 10px 17px 3px rgb(35 35 35 / 10%);
+  background: rgba(182, 194, 230, 0.4);
   z-index: -1;
   padding: 0 2em;
   margin-bottom: 30%;
