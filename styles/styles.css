@@ -5,8 +5,6 @@ html {
   color: #043349;
 }
 body {
-  background-repeat: no-repeat;
-  background-size: contain;
   height: 100%;
   width: 100%;
   margin: 0;
@@ -21,6 +19,9 @@ body {
     #c9532c,
     #eb6122
   );
+  background-repeat: no-repeat;
+  background-size: contain;
+  animation: fondo-anim 20s infinite alternate;
 }
 .cool {
   background-image: radial-gradient(
@@ -51,6 +52,19 @@ body {
     #e29bd0 95.83%,
     #e999c8 100%
   );
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+@keyframes fondo-anim {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .hero {
@@ -65,10 +79,10 @@ body {
   border: 1px solid rgb(255, 255, 255, 0.01);
   border-radius: 10px;
   box-shadow: 7px 10px 17px 3px rgb(35 35 35 / 10%);
-  background: rgba(182, 194, 230, 0.4);
+  background: rgba(182, 194, 230, 0.346);
   z-index: -1;
   padding: 0 2em;
-  margin-bottom: 30%;
+  margin-bottom: 15%;
 }
 
 /* error */
@@ -85,6 +99,7 @@ body {
     #dd5801 87.5%,
     #d46100 100%
   );
+
   position: absolute;
   top: 15%;
   left: 0;
@@ -176,10 +191,43 @@ body {
   right: 0;
   cursor: pointer;
 }
+.change div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.3em;
+  margin-top: 0.3em;
+  font-size: small;
+  font-weight: 500;
+}
 .change img {
   width: 50px;
+  margin-left: 0.3em;
 }
 
 .ContainC {
   font-weight: 800;
+}
+
+.halloCala {
+  display: none;
+  transition: color 0.8s linear 0.2s;
+}
+
+.coolCala {
+  transition: color 0.8s linear 0.2s;
+}
+.halloCala:focus {
+  display: none;
+  color: #043349;
+}
+
+.coolCala:focus {
+  transition: color 0.8s linear 0.2s;
+  color: #043349;
+}
+
+.reloaded {
+  margin-left: 1em;
+  cursor: pointer;
 }

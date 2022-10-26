@@ -312,7 +312,6 @@ const addCommentary = (imprimir) => {
 
 const commentsPrint = () => {
   const father = document.getElementById("comments");
-  debugger;
   for (let i = 0; i < commentary.length; i += 3) {
     const p = document.createElement("p");
     p.textContent += `en la funcion ${commentary[i]} en la linea ${
