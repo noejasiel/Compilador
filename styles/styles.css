@@ -2,8 +2,27 @@ html {
   margin: 0px;
   box-sizing: 100vh;
   font-family: "Raleway", sans-serif;
+  color: #043349;
 }
 body {
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.hallo {
+  background: linear-gradient(
+    #431c52,
+    #652a48,
+    #86383f,
+    #a84535,
+    #c9532c,
+    #eb6122
+  );
+}
+.cool {
   background-image: radial-gradient(
     circle at -2.88% 19.47%,
     #73c293 0,
@@ -32,12 +51,6 @@ body {
     #e29bd0 95.83%,
     #e999c8 100%
   );
-  background-repeat: no-repeat;
-  background-size: contain;
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
 }
 
 .hero {
@@ -102,47 +115,44 @@ body {
 .border img {
   margin-right: 0.5em;
 }
-/* .errContenido {
-  padding-top: 6em;
+.contentPasos {
+  margin-bottom: 3em;
+  cursor: pointer;
 }
-.border {
-  color: black;
-  /* text-shadow: -1px -1px 0 white, 1px -1px 0 white, 1px 1px 0 white,
-    -1px 1px 0 white; */
-/* } */
-/* .errorr {
-  color: green;
-  animation: errorr 3s ease-in-out infinite;
+.contentPasos h3 img {
+  margin-left: 0.5em;
 }
-@keyframes errorr {
-  0%,
-  100% {
-    clip-path: polygon(
-      0% 47%,
-      10% 48%,
-      33% 54%,
-      54% 60%,
-      70% 61%,
-      84% 59%,
-      100% 52%,
-      100% 100%,
-      0% 100%
-    );
+.contentPasos h3 {
+  display: flex;
+  align-items: center;
+}
+
+.pasos {
+  font-size: x-large;
+  display: none;
+}
+.pasos dd {
+  animation-duration: 3s;
+  animation-name: slidein;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  color: #043349;
+  font-size: x-large;
+  font-weight: 500;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 2%;
+    width: 300%;
   }
-  50% {
-    clip-path: polygon(
-      0% 60%,
-      15% 65%,
-      34% 6%,
-      51% 62%,
-      67% 58%,
-      84% 45%,
-      100% 46%,
-      100% 100%,
-      0% 100%
-    );
+  to {
+    margin-left: 0%;
+    width: 100%;
   }
-} */
+}
+
 */ .Info {
   color: #043349;
 }
@@ -155,4 +165,21 @@ body {
 }
 .power img {
   margin-right: 0.5em;
+}
+
+.tela {
+  color: #043349;
+}
+
+.change {
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+}
+.change img {
+  width: 50px;
+}
+
+.ContainC {
+  font-weight: 800;
 }
